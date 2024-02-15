@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <application
+        android:name=".Utills.SalesApp"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/app_logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/app_logo"
+        android:requestLegacyExternalStorage="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.SalesApp.NoActionBar"
+        tools:targetApi="31">
+        <activity
+            android:name=".Activity.RegisterActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.InsertInstallerActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.AllLeadActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.InsertClientActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.ClientsListActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.PlumberListActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.EditLeadActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.ArchitectListActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.MEPListActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.RequestedQuotedAllActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.InsertMEPActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.RequestedPIAllActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.GeneratedQuotedAllActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.GeneratedPIAllActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.SalesExecutiveActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.SearchDataActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.UpdateLeadActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.AttndanceReportActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.InquiryActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.NoInternetActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.AddLeadActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.QuoteLeadActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.InsertArchitureActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.OfficeTeamActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.LoginActivity"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
+            android:name=".Activity.SplashActivity"
+            android:exported="true"
+            android:launchMode = "singleTop"
+            android:theme="@style/Theme.SalesApp.NoActionBar">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+        <service
+            android:name=".Activity.LocationService"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.DashboardActivity"
+            android:exported="true"
+            android:launchMode = "singleTop"
+            android:label="@string/app_name">
+
+        </activity>
+    </application>
+
+</manifest>
