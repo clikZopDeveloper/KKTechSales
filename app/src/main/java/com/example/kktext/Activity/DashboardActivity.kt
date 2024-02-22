@@ -374,7 +374,7 @@ class DashboardActivity : AppCompatActivity(), ApiResponseListner {
         SalesApp.isAddAccessToken = true
         apiClient = ApiController(this, this)
         val params = Utility.getParmMap()
-        params["last_location"] = "${list?.get(0)?.latitude},${list?.get(0)?.latitude}"
+        params["last_location"] = "${list?.get(0)?.latitude},${list?.get(0)?.longitude}"
         apiClient.progressView.showLoader()
         apiClient.getApiPostCall(dayStatus, params)
 
@@ -900,7 +900,6 @@ class DashboardActivity : AppCompatActivity(), ApiResponseListner {
                     if (location != null) {
                         val geocoder = Geocoder(this, Locale.getDefault())
                         list =
-
                             geocoder.getFromLocation(location.latitude, location.longitude, 1)
                         Log.d("zxxzv", "Lat" + Gson().toJson(list?.get(0)?.latitude))
                         Log.d("zxxzv", "Long" + Gson().toJson(list?.get(0)?.longitude))
@@ -980,6 +979,6 @@ class DashboardActivity : AppCompatActivity(), ApiResponseListner {
     override fun onDestroy() {
         super.onDestroy()
         // Start the LocationService when the app is closed
-        startService(Intent(this, LocationService::class.java))
+     //   startService(Intent(this, LocationService::class.java))
     }
 }

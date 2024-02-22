@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <!--  lead id, source, plumber, architect, client, lead date-->
+    </data>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/_5dip"
+        app:cardElevation="@dimen/_5dip"
+        app:cardBackgroundColor="@color/vlight_primar_color"
+        android:layout_margin="@dimen/_4dip">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/_5dip"
+            android:padding="@dimen/_4dip">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5dip"
+                android:padding="@dimen/_2dip"
+                android:layout_marginHorizontal="@dimen/_5dip"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ID : "
+                    android:layout_below="@+id/tvDate"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="@dimen/_12sp" />
+
+                <TextView
+                    android:id="@+id/tvID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_10dp"
+                    android:layout_below="@+id/tvDate"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textSize="@dimen/_14sp"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5dip"
+                android:padding="@dimen/_2dip"
+                android:layout_marginHorizontal="@dimen/_5dip"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name : "
+                    android:layout_below="@+id/tvDate"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="@dimen/_12sp" />
+
+                <TextView
+                    android:id="@+id/tvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_marginStart="@dimen/_10dp"
+                    android:layout_below="@+id/tvDate"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textSize="@dimen/_14sp"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5dip"
+                android:padding="@dimen/_2dip"
+                android:layout_marginHorizontal="@dimen/_5dip"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Number : "
+                    android:layout_below="@+id/tvDate"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="@dimen/_12sp" />
+
+                <TextView
+                    android:id="@+id/tvNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_marginStart="@dimen/_10dp"
+                    android:layout_below="@+id/tvDate"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textSize="@dimen/_14sp"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5dip"
+                android:padding="@dimen/_2dip"
+                android:layout_marginHorizontal="@dimen/_5dip"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Status : "
+                    android:layout_below="@+id/tvDate"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="@dimen/_12sp" />
+
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_marginStart="@dimen/_10dp"
+                    android:layout_below="@+id/tvDate"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textSize="@dimen/_14sp"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5dip"
+                android:padding="@dimen/_2dip"
+                android:layout_marginHorizontal="@dimen/_5dip"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Remained Date : "
+                    android:layout_below="@+id/tvDate"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="@dimen/_12sp" />
+
+                <TextView
+                    android:id="@+id/tvRemainedDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_marginStart="@dimen/_10dp"
+                    android:layout_below="@+id/tvDate"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textSize="@dimen/_14sp"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5dip"
+                android:padding="@dimen/_2dip"
+                android:layout_marginHorizontal="@dimen/_5dip"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Remained Time : "
+                    android:layout_below="@+id/tvDate"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="@dimen/_12sp" />
+
+                <TextView
+                    android:id="@+id/tvRemainedTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_marginStart="@dimen/_10dp"
+                    android:layout_below="@+id/tvDate"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textSize="@dimen/_14sp"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>

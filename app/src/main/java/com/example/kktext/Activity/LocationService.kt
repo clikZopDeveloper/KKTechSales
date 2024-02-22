@@ -44,16 +44,16 @@ class LocationService : Service() , ApiResponseListner{
         SalesApp.isAddAccessToken = true
         apiClient = ApiController(this, this)
         val params = Utility.getParmMap()
-        params["last_location"] = "${location?.latitude}, Longitude: ${location?.longitude}"
+        params["last_location"] = "${location?.latitude},${location?.longitude}"
     //    apiClient.progressView.showLoader()
         apiClient.getApiPostCall(ApiContants.getLocationUpdate, params)
     }
     private fun requestLocationUpdates() {
         val locationRequest = LocationRequest.create().apply {
-            interval = 15 * 60 * 1000 // 15 minutes
+            interval = 3 * 60 * 1000 // 3 minutes
           //  interval = 1 * 60 * 1000 // 2 minutes
 
-            fastestInterval = 15 * 60 * 1000 // 5 minutes
+            fastestInterval = 3 * 60 * 1000 // 5 minutes
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
         }
@@ -98,7 +98,7 @@ class LocationService : Service() , ApiResponseListner{
                     ProductDeleteBean::class.java
                 )
 
-                Toast.makeText(this, requestQuoteBean.msg, Toast.LENGTH_SHORT).show()
+              //  Toast.makeText(this, requestQuoteBean.msg, Toast.LENGTH_SHORT).show()
             }
 
         }catch (e:Exception){

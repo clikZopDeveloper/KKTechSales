@@ -50,12 +50,8 @@ public class SalesApp extends Application implements Application.ActivityLifecyc
     public static String deviceId;
     public static boolean isAddAccessToken;
     public static boolean isUpComingSession = true;
-    public static ArrayList<SourceBean.Data> sourceList = new ArrayList<>();
     public static ArrayList<StateBean.Data> stateList = new ArrayList<>();
-    public static ArrayList<InstallerBean.Data> installerList = new ArrayList<>();
-    public static ArrayList<ArchitectBean.Data> architectList = new ArrayList<>();
     public static ArrayList<PropertyStageBean.Data> propertyStageList = new ArrayList<>();
-    public static ArrayList<ClientBean.Data> clientList = new ArrayList<>();
     public static ArrayList<ProductCategoryBean.Data>productCatList = new ArrayList<>();
     public static ArrayList<CustProdCatBean.Data>prodCustomCatList = new ArrayList<>();
     public static ArrayList<DealerBean.Data>dealerList = new ArrayList<>();
@@ -63,7 +59,6 @@ public class SalesApp extends Application implements Application.ActivityLifecyc
     public static ArrayList<ProfileColorBean.Data>profileColorList = new ArrayList<>();
     public static ArrayList<GlassThicknessBean.Data>glassThicknessList = new ArrayList<>();
     public static ArrayList<ProfileNameBean.Data>profileNameList = new ArrayList<>();
-    public static ArrayList<MEPBean.Data>mepList = new ArrayList<>();
 
     @Override
     public void onCreate() {

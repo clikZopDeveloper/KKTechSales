@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import com.example.kktext.ApiHelper.ApiController
 import com.example.kktext.ApiHelper.ApiResponseListner
 import com.example.kktext.Model.CityBean
+import com.example.kktext.Model.ClientBean
 import com.example.kktext.Model.InsertClientBean
 import com.example.kktext.R
 import com.example.kktext.Utills.*
@@ -104,7 +105,6 @@ class InsertClientActivity : AppCompatActivity(), ApiResponseListner,
         params["doa"] = binding.editDOA.text.toString()
         apiClient.progressView.showLoader()
         apiClient.getApiPostCall(ApiContants.insertClient, params)
-
     }
 
     fun apiCity(stateName: String) {
@@ -117,6 +117,13 @@ class InsertClientActivity : AppCompatActivity(), ApiResponseListner,
 
     }
 
+    fun apiGetClient() {
+        SalesApp.isAddAccessToken = true
+        apiClient = ApiController(activity, this)
+        val params = Utility.getParmMap()
+        apiClient.progressView.showLoader()
+        apiClient.getApiPostCall(ApiContants.getClient, params)
+    }
     override fun success(tag: String?, jsonElement: JsonElement) {
         try {
             apiClient.progressView.hideLoader()
@@ -126,7 +133,7 @@ class InsertClientActivity : AppCompatActivity(), ApiResponseListner,
                     InsertClientBean::class.java
                 )
                 Toast.makeText(this,insertClientBean.msg,Toast.LENGTH_SHORT).show()
-
+             //   apiGetClient()
                 finish()
             }
 
@@ -161,6 +168,8 @@ class InsertClientActivity : AppCompatActivity(), ApiResponseListner,
                 }
 
             }
+
+
         }catch (e:Exception){
             Log.d("error>>",e.localizedMessage)
         }

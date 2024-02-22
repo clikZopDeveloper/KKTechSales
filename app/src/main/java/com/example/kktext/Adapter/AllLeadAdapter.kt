@@ -54,7 +54,7 @@ class AllLeadAdapter(var context: Activity, var list: List<AllLeadDataBean.Data>
                 .putExtra("client",list[position].clientName)
                 .putExtra("date",list[position].leadDate)
                 .putExtra("propertyStage",list[position].propertyStage)
-                .putExtra("gst",list[position].gst.toString())
+                .putExtra("gst",list[position].gst?.toString())
                 .putExtra("state",list[position].state)
                 .putExtra("city",list[position].city)
                 .putExtra("mep",list[position].mep?.toString())

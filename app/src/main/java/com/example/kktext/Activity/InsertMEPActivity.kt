@@ -16,6 +16,7 @@ import com.example.kktext.ApiHelper.ApiController
 import com.example.kktext.ApiHelper.ApiResponseListner
 import com.example.kktext.Model.BaseResponseBean
 import com.example.kktext.Model.CityBean
+import com.example.kktext.Model.MEPBean
 import com.example.kktext.R
 import com.example.kktext.Utills.*
 import com.example.kktext.databinding.ActivityInsertarchitureBinding
@@ -109,7 +110,13 @@ class InsertMEPActivity : AppCompatActivity(), ApiResponseListner,
         apiClient.getApiPostCall(ApiContants.insertMep, params)
 
     }
-
+    fun apiGetMEP() {
+        SalesApp.isAddAccessToken = true
+        apiClient = ApiController(activity, this)
+        val params = Utility.getParmMap()
+        apiClient.progressView.showLoader()
+        apiClient.getApiPostCall(ApiContants.getMEP, params)
+    }
     fun apiCity(stateName: String) {
         SalesApp.isAddAccessToken = true
         apiClient = ApiController(activity, this)

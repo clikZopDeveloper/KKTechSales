@@ -81,16 +81,14 @@ class AddLeadActivity : AppCompatActivity(), ApiResponseListner,
         binding.igToolbar.ivLogout.visibility = View.GONE
         binding.igToolbar.switchDayStart.visibility = View.GONE
         //  requestPermission()
-        setSourceData()
+        apiAllGet()
+
         setProductCat()
         //   setCustomProdCat()
         setState()
-        setArchitect()
-        setMEP()
         //  setDealer()
-        setInstaller()
         setPropertyStage()
-        setClient()
+
         typeMode()
         apiCatory(projectType)
 
@@ -152,6 +150,16 @@ class AddLeadActivity : AppCompatActivity(), ApiResponseListner,
         binding.btnSubmit.setOnClickListener {
             apiInsertLead()
         }
+    }
+    fun apiAllGet() {
+        SalesApp.isAddAccessToken = true
+        apiClient = ApiController(activity, this)
+        val params = Utility.getParmMap()
+        apiClient.getApiPostCall(ApiContants.getSource, params)
+        apiClient.getApiPostCall(ApiContants.getPlumber, params)
+        apiClient.getApiPostCall(ApiContants.getArchitect, params)
+        apiClient.getApiPostCall(ApiContants.getClient, params)
+        apiClient.getApiPostCall(ApiContants.getMEP, params)
     }
 
     fun typeMode() {
@@ -537,7 +545,67 @@ class AddLeadActivity : AppCompatActivity(), ApiResponseListner,
 
                   }
                  */
+            if (tag == ApiContants.getSource) {
+                val sourceBean = apiClient.getConvertIntoModel<SourceBean>(
+                    jsonElement.toString(),
+                    SourceBean::class.java
+                )
+                if (sourceBean.error == false) {
+                    setSourceData(sourceBean.data)
+                   /* SalesApp.sourceList.clear()
+                    SalesApp.sourceList.addAll(sourceBean.data)*/
+                }
+            }
 
+            if (tag == ApiContants.getPlumber) {
+                val istallerBean = apiClient.getConvertIntoModel<InstallerBean>(
+                    jsonElement.toString(),
+                    InstallerBean::class.java
+                )
+                if (istallerBean.error == false) {
+//                    SalesApp.installerList.clear()
+//                    SalesApp.installerList.addAll(istallerBean.data)
+                    setInstaller(istallerBean.data)
+                }
+            }
+
+            if (tag == ApiContants.getArchitect) {
+                val architectBean = apiClient.getConvertIntoModel<ArchitectBean>(
+                    jsonElement.toString(),
+                    ArchitectBean::class.java
+                )
+                if (architectBean.error == false) {
+                    setArchitect(architectBean.data)
+                  /*  SalesApp.architectList.clear()
+                    SalesApp.architectList.addAll(architectBean.data)*/
+                }
+            }
+
+
+            if (tag == ApiContants.getClient) {
+                val clientBean = apiClient.getConvertIntoModel<ClientBean>(
+                    jsonElement.toString(),
+                    ClientBean::class.java
+                )
+                if (clientBean.error == false) {
+                    setClient(clientBean.data)
+                   // SalesApp.clientList.clear()
+                   // SalesApp.clientList.addAll(clientBean.data)
+                }
+            }
+
+            if (tag == ApiContants.getMEP) {
+                val mepBean = apiClient.getConvertIntoModel<MEPBean>(
+                    jsonElement.toString(),
+                    MEPBean::class.java
+                )
+
+                if (mepBean.error == false) {
+                    setMEP(mepBean.data)
+                   /* SalesApp.mepList.clear()
+                    SalesApp.mepList.addAll(mepBean.data)*/
+                }
+            }
         } catch (e: Exception) {
             Log.d("error>>", e.localizedMessage)
         }
@@ -548,11 +616,11 @@ class AddLeadActivity : AppCompatActivity(), ApiResponseListner,
         Utility.showSnackBar(activity, errorMessage)
     }
 
-    fun setSourceData() {
+    fun setSourceData(data: List<SourceBean.Data>) {
       //  binding.stateSource.setThreshold(1);//will start working from first character
-        val state = arrayOfNulls<String>(SalesApp.sourceList.size)
-        for (i in SalesApp.sourceList.indices) {
-            state[i] = SalesApp.sourceList.get(i).name
+        val state = arrayOfNulls<String>(data.size)
+        for (i in data.indices) {
+            state[i] = data.get(i).name
         }
 
         binding.stateSource.setAdapter(
@@ -563,7 +631,7 @@ class AddLeadActivity : AppCompatActivity(), ApiResponseListner,
         )
 
         binding.stateSource.setOnItemClickListener(AdapterView.OnItemClickListener { parent, view, position, id ->
-            //  var sourceName = SalesApp.sourceList.get(position).name
+            //  var sourceName = data.get(position).name
 
             binding.stateSource.setText(parent.getItemAtPosition(position).toString())
             Log.d("StateID", "" + parent.getItemAtPosition(position).toString())
@@ -572,7 +640,7 @@ class AddLeadActivity : AppCompatActivity(), ApiResponseListner,
                 binding.stateSource.getText().toString(),
                 Toast.LENGTH_SHORT
             ).show()
-            setSourceData()
+            setSourceData(data)
 
         })
     }
@@ -605,10 +673,10 @@ class AddLeadActivity : AppCompatActivity(), ApiResponseListner,
         })
     }
 
-    fun setInstaller() {
-        val state = arrayOfNulls<String>(SalesApp.installerList.size)
-        for (i in SalesApp.installerList.indices) {
-            state[i] = SalesApp.installerList.get(i).name
+    fun setInstaller(data: List<InstallerBean.Data>) {
+        val state = arrayOfNulls<String>(data.size)
+        for (i in data.indices) {
+            state[i] = data.get(i).name
         }
 
         binding.stateInstaller.setAdapter(
@@ -627,15 +695,15 @@ class AddLeadActivity : AppCompatActivity(), ApiResponseListner,
                 binding.stateInstaller.getText().toString(),
                 Toast.LENGTH_SHORT
             ).show()
-            setInstaller()
+            setInstaller(data)
         })
 
     }
 
-    fun setArchitect() {
-        val state = arrayOfNulls<String>(SalesApp.architectList.size)
-        for (i in SalesApp.architectList.indices) {
-            state[i] = SalesApp.architectList.get(i).name
+    fun setArchitect(data: List<ArchitectBean.Data>) {
+        val state = arrayOfNulls<String>(data.size)
+        for (i in data.indices) {
+            state[i] = data.get(i).name
         }
 
         binding.stateArchitect.setAdapter(
@@ -654,14 +722,14 @@ class AddLeadActivity : AppCompatActivity(), ApiResponseListner,
                 Toast.LENGTH_SHORT
             ).show()
 
-            setArchitect()
+            setArchitect(data)
         })
     }
-    fun setMEP() {
+    fun setMEP(data: List<MEPBean.Data>) {
         //  binding.stateSource.setThreshold(1);//will start working from first character
-        val state = arrayOfNulls<String>(SalesApp.mepList.size)
-        for (i in SalesApp.mepList.indices) {
-            state[i] = SalesApp.mepList.get(i).name
+        val state = arrayOfNulls<String>(data.size)
+        for (i in data.indices) {
+            state[i] = data.get(i).name
         }
 
         binding.stateMEP.setAdapter(
@@ -681,7 +749,7 @@ class AddLeadActivity : AppCompatActivity(), ApiResponseListner,
                 binding.stateMEP.getText().toString(),
                 Toast.LENGTH_SHORT
             ).show()
-            setMEP()
+            setMEP(data)
 
         })
     }
@@ -738,10 +806,10 @@ class AddLeadActivity : AppCompatActivity(), ApiResponseListner,
         })
     }
 
-    fun setClient() {
-        val state = arrayOfNulls<String>(SalesApp.clientList.size)
-        for (i in SalesApp.clientList.indices) {
-            state[i] = SalesApp.clientList.get(i).name+" / "+SalesApp.clientList.get(i).number
+    fun setClient(data: List<ClientBean.Data>) {
+        val state = arrayOfNulls<String>(data.size)
+        for (i in data.indices) {
+            state[i] = data.get(i).name+" / "+data.get(i).number
         }
 
         binding.stateClient.setAdapter(
@@ -755,7 +823,7 @@ class AddLeadActivity : AppCompatActivity(), ApiResponseListner,
             binding.stateClient.setText(parent.getItemAtPosition(position).toString())
             Log.d("StateID", "" + parent.getItemAtPosition(position).toString())
 
-            for (clientBean in SalesApp.clientList) {
+            for (clientBean in data) {
 
                val name= clientBean.name+" / "+clientBean.number
                 if (name.equals(parent.getItemAtPosition(position).toString())) {
@@ -770,7 +838,7 @@ class AddLeadActivity : AppCompatActivity(), ApiResponseListner,
                 Toast.LENGTH_SHORT
             ).show()
 
-            setClient()
+            setClient(data)
         })
     }
 

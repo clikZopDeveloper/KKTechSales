@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.kktext.ApiHelper.ApiController
 import com.example.kktext.ApiHelper.ApiResponseListner
+import com.example.kktext.Model.ArchitectBean
 import com.example.kktext.Model.BaseResponseBean
 import com.example.kktext.Model.CityBean
 import com.example.kktext.R

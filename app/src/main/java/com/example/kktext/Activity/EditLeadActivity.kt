@@ -103,22 +103,32 @@ try {
     client = intent.getStringExtra("client")!!
     date = intent.getStringExtra("date")!!
     propertyStage = intent.getStringExtra("propertyStage")!!
-    gst = intent.getStringExtra("gst")!!
+
     state = intent.getStringExtra("state")!!
     city = intent.getStringExtra("city")!!
-    catID = intent.getStringExtra("catID")!!
-    subCatID = intent.getStringExtra("subCatID")!!
+
+    if (intent.hasExtra("catID")){
+        catID = intent.getStringExtra("catID")!!
+    }
+
+    if (intent.hasExtra("subCatID")){
+        subCatID = intent.getStringExtra("subCatID")!!
+    }
 
     if (intent.getStringExtra("mep")!=null){
         mep = intent.getStringExtra("mep")!!
         binding.stateMEP.setText(mep).toString()
     }
 
+    if (intent.getStringExtra("gst")!=null){
+        gst = intent.getStringExtra("gst")!!
+        binding.editGSTNo.setText(gst).toString()
+    }
+
     binding.stateSource.setText(source).toString()
     binding.stateArchitect.setText(architect).toString()
     binding.stateClient.setText(client).toString()
     binding.statePropertyStage.setText(propertyStage).toString()
-    binding.editGSTNo.setText(gst).toString()
     binding.stateselector.setText(state).toString()
     binding.cityselector.setText(city).toString()
 
@@ -126,18 +136,15 @@ try {
 }catch (e:Exception){
     Log.d("error>>>>>>>>>",e.localizedMessage)
 }
-
+        apiAllGet()
         //  requestPermission()
-        setSourceData()
+
         setProductCat()
         //   setCustomProdCat()
         setState()
-        setArchitect()
-        setMEP()
         //  setDealer()
-        setInstaller()
         setPropertyStage()
-        setClient()
+
         typeMode()
         apiCatory(projectType)
        // apiSubCatory(subCatID.toInt())
@@ -202,7 +209,16 @@ try {
             apiInsertLead()
         }
     }
-
+    fun apiAllGet() {
+        SalesApp.isAddAccessToken = true
+        apiClient = ApiController(activity, this)
+        val params = Utility.getParmMap()
+        apiClient.getApiPostCall(ApiContants.getSource, params)
+        apiClient.getApiPostCall(ApiContants.getPlumber, params)
+        apiClient.getApiPostCall(ApiContants.getArchitect, params)
+        apiClient.getApiPostCall(ApiContants.getClient, params)
+        apiClient.getApiPostCall(ApiContants.getMEP, params)
+    }
     fun apiProductList(leadID: String) {
         SalesApp.isAddAccessToken = true
         apiClient = ApiController(this, this)
@@ -653,7 +669,67 @@ try {
 
                   }
                  */
+            if (tag == ApiContants.getSource) {
+                val sourceBean = apiClient.getConvertIntoModel<SourceBean>(
+                    jsonElement.toString(),
+                    SourceBean::class.java
+                )
+                if (sourceBean.error == false) {
+                    setSourceData(sourceBean.data)
+                    /* SalesApp.sourceList.clear()
+                     SalesApp.sourceList.addAll(sourceBean.data)*/
+                }
+            }
 
+            if (tag == ApiContants.getPlumber) {
+                val istallerBean = apiClient.getConvertIntoModel<InstallerBean>(
+                    jsonElement.toString(),
+                    InstallerBean::class.java
+                )
+                if (istallerBean.error == false) {
+//                    SalesApp.installerList.clear()
+//                    SalesApp.installerList.addAll(istallerBean.data)
+                    setInstaller(istallerBean.data)
+                }
+            }
+
+            if (tag == ApiContants.getArchitect) {
+                val architectBean = apiClient.getConvertIntoModel<ArchitectBean>(
+                    jsonElement.toString(),
+                    ArchitectBean::class.java
+                )
+                if (architectBean.error == false) {
+                    setArchitect(architectBean.data)
+                    /*  SalesApp.architectList.clear()
+                      SalesApp.architectList.addAll(architectBean.data)*/
+                }
+            }
+
+
+            if (tag == ApiContants.getClient) {
+                val clientBean = apiClient.getConvertIntoModel<ClientBean>(
+                    jsonElement.toString(),
+                    ClientBean::class.java
+                )
+                if (clientBean.error == false) {
+                    setClient(clientBean.data)
+                    // SalesApp.clientList.clear()
+                    // SalesApp.clientList.addAll(clientBean.data)
+                }
+            }
+
+            if (tag == ApiContants.getMEP) {
+                val mepBean = apiClient.getConvertIntoModel<MEPBean>(
+                    jsonElement.toString(),
+                    MEPBean::class.java
+                )
+
+                if (mepBean.error == false) {
+                    setMEP(mepBean.data)
+                    /* SalesApp.mepList.clear()
+                     SalesApp.mepList.addAll(mepBean.data)*/
+                }
+            }
         } catch (e: Exception) {
             Log.d("error>>", e.localizedMessage)
         }
@@ -664,11 +740,11 @@ try {
         Utility.showSnackBar(activity, errorMessage)
     }
 
-    fun setSourceData() {
+    fun setSourceData(data: List<SourceBean.Data>) {
         //  binding.stateSource.setThreshold(1);//will start working from first character
-        val state = arrayOfNulls<String>(SalesApp.sourceList.size)
-        for (i in SalesApp.sourceList.indices) {
-            state[i] = SalesApp.sourceList.get(i).name
+        val state = arrayOfNulls<String>(data.size)
+        for (i in data.indices) {
+            state[i] = data.get(i).name
         }
 
         binding.stateSource.setAdapter(
@@ -689,7 +765,7 @@ try {
                 Toast.LENGTH_SHORT
             ).show()
 
-            setSourceData()
+            setSourceData(data)
 
         })
     }
@@ -722,10 +798,10 @@ try {
         })
     }
 
-    fun setInstaller() {
-        val state = arrayOfNulls<String>(SalesApp.installerList.size)
-        for (i in SalesApp.installerList.indices) {
-            state[i] = SalesApp.installerList.get(i).name
+    fun setInstaller(data: List<InstallerBean.Data>) {
+        val state = arrayOfNulls<String>(data.size)
+        for (i in data.indices) {
+            state[i] = data.get(i).name
         }
 
         binding.stateInstaller.setAdapter(
@@ -744,15 +820,15 @@ try {
                 binding.stateInstaller.getText().toString(),
                 Toast.LENGTH_SHORT
             ).show()
-            setInstaller()
+            setInstaller(data)
         })
 
     }
 
-    fun setArchitect() {
-        val state = arrayOfNulls<String>(SalesApp.architectList.size)
-        for (i in SalesApp.architectList.indices) {
-            state[i] = SalesApp.architectList.get(i).name
+    fun setArchitect(data: List<ArchitectBean.Data>) {
+        val state = arrayOfNulls<String>(data.size)
+        for (i in data.indices) {
+            state[i] = data.get(i).name
         }
 
         binding.stateArchitect.setAdapter(
@@ -771,17 +847,17 @@ try {
                 Toast.LENGTH_SHORT
             ).show()
 
-            setArchitect()
+            setArchitect(data)
 
 
         })
     }
 
-    fun setMEP() {
+    fun setMEP(data: List<MEPBean.Data>) {
         //  binding.stateSource.setThreshold(1);//will start working from first character
-        val state = arrayOfNulls<String>(SalesApp.mepList.size)
-        for (i in SalesApp.mepList.indices) {
-            state[i] = SalesApp.mepList.get(i).name
+        val state = arrayOfNulls<String>(data.size)
+        for (i in data.indices) {
+            state[i] = data.get(i).name
         }
 
         binding.stateMEP.setAdapter(
@@ -801,7 +877,7 @@ try {
                 binding.stateMEP.getText().toString(),
                 Toast.LENGTH_SHORT
             ).show()
-            setMEP()
+            setMEP(data)
 
         })
     }
@@ -859,10 +935,10 @@ try {
         })
     }
 
-    fun setClient() {
-        val state = arrayOfNulls<String>(SalesApp.clientList.size)
-        for (i in SalesApp.clientList.indices) {
-            state[i] = SalesApp.clientList.get(i).name + " / " + SalesApp.clientList.get(i).number
+    fun setClient(data: List<ClientBean.Data>) {
+        val state = arrayOfNulls<String>(data.size)
+        for (i in data.indices) {
+            state[i] = data.get(i).name + " / " + data.get(i).number
         }
 
         binding.stateClient.setAdapter(
@@ -876,7 +952,7 @@ try {
             binding.stateClient.setText(parent.getItemAtPosition(position).toString())
             Log.d("StateID", "" + parent.getItemAtPosition(position).toString())
 
-            for (clientBean in SalesApp.clientList) {
+            for (clientBean in data) {
 
                 val name = clientBean.name + " / " + clientBean.number
                 if (name.equals(parent.getItemAtPosition(position).toString())) {
@@ -891,7 +967,7 @@ try {
                 Toast.LENGTH_SHORT
             ).show()
 
-            setClient()
+            setClient(data)
         })
     }
 

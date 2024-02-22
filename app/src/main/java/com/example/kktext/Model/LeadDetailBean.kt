@@ -56,7 +56,7 @@ data class LeadDetailBean(
             @SerializedName("app_name")
             val appName: Any, // null
             @SerializedName("architect")
-            val architect: String, // Ar. Unknown/Harsimran 
+            val architect: String, // Ar. Unknown/Harsimran
             @SerializedName("budget")
             val budget: Any, // null
             @SerializedName("campaign")
@@ -72,13 +72,13 @@ data class LeadDetailBean(
             @SerializedName("classification")
             val classification: Any, // null
             @SerializedName("client_address")
-            val clientAddress: String, // E11/6 Vatika Ambala City 
+            val clientAddress: String, // E11/6 Vatika Ambala City
             @SerializedName("client_city")
             val clientCity: String, // Ambala
             @SerializedName("client_id")
             val clientId: Int, // 200
             @SerializedName("client_name")
-            val clientName: String, // Mrs.Anu Khosla 
+            val clientName: String, // Mrs.Anu Khosla
             @SerializedName("client_number")
             val clientNumber: String, // 9810872764
             @SerializedName("conversion_type")

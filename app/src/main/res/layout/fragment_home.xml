@@ -407,7 +407,27 @@
             android:layout_gravity="center"
             android:textColor="@color/white"
             android:gravity="center"/>
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/vlight_primar_color"
+            android:paddingVertical="@dimen/_10dp"
+            android:text="Notifications"
+            android:layout_marginTop="@dimen/_5dip"
+            android:paddingHorizontal="@dimen/_6dp"
+            android:textSize="@dimen/_14sp"
+            android:fontFamily="@font/roboto_regular"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:gravity="center"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcNotification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_notification" />
     </LinearLayout>
             </androidx.cardview.widget.CardView>
     </androidx.core.widget.NestedScrollView>

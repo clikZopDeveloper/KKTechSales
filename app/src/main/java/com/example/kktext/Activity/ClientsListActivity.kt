@@ -103,8 +103,6 @@ class ClientsListActivity : AppCompatActivity(), ApiResponseListner,
 
                 openUpdateDetailDialog(name,mobileNo,state,city,address,id,doa,dob)
             }
-
-
         })
         binding.rcAllLead.adapter = mAllAdapter
         // rvMyAcFiled.isNestedScrollingEnabled = false

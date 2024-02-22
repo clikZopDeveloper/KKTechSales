@@ -52,7 +52,7 @@ class AllLeadActivity : AppCompatActivity(), ApiResponseListner,
 
         myReceiver = ConnectivityListener()
 
-        binding.igToolbar.tvTitle.text = "All Lead"
+     //   binding.igToolbar.tvTitle.text = "All Lead"
         binding.igToolbar.ivMenu.setImageDrawable(resources.getDrawable(R.drawable.ic_back_black))
         binding.igToolbar.ivMenu.setOnClickListener { finish() }
         binding.igToolbar.ivLogout.visibility = View.GONE
@@ -69,8 +69,6 @@ if (intent.hasExtra("conversion")){
     }
 }
         intent.getStringExtra("leadStatus")?.let { apiAllLead(it) }
-
-
     }
 
     fun apiAllLead(status: String) {
@@ -359,7 +357,6 @@ if (intent.hasExtra("conversion")){
 
     }
 
-
     private fun openFullScreenDialog(imgUrl: String) {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.fullscreen_dailog)
@@ -398,6 +395,7 @@ if (intent.hasExtra("conversion")){
         }
 
     }
+
     override fun onStart() {
         super.onStart()
     }

@@ -13,20 +13,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kktext.Activity.*
+import com.example.kktext.Adapter.AllGeneratedQuoteAdapter
 import com.example.kktext.Adapter.DashboardAdapter
+import com.example.kktext.Adapter.NotificationAdapter
 import com.example.kktext.ApiHelper.ApiController
 import com.example.kktext.ApiHelper.ApiResponseListner
 import com.example.kktext.Model.*
 import com.example.kktext.R
 import com.example.kktext.Utills.*
-import com.example.kktext.databinding.FragmentHomeBinding
 import com.google.gson.JsonElement
 import com.stpl.antimatter.Utils.ApiContants
 
 class HomeFragment : Fragment(), ApiResponseListner {
     private lateinit var apiClient: ApiController
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: com.example.kktext.databinding.FragmentHomeBinding? = null
     var newLeads = ""
     var pending_leads = ""
     var processing_leads = ""
@@ -58,7 +60,7 @@ class HomeFragment : Fragment(), ApiResponseListner {
         val homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = com.example.kktext.databinding.FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         binding.refreshLayout.setOnRefreshListener {
@@ -120,14 +122,9 @@ class HomeFragment : Fragment(), ApiResponseListner {
         apiClient = ApiController(activity, this)
         val params = Utility.getParmMap()
         apiClient.progressView.showLoader()
-        apiClient.getApiPostCall(ApiContants.getSource, params)
         apiClient.getApiPostCall(ApiContants.getState, params)
-        apiClient.getApiPostCall(ApiContants.getPlumber, params)
-        apiClient.getApiPostCall(ApiContants.getArchitect, params)
         apiClient.getApiPostCall(ApiContants.getPropertyStage, params)
-        apiClient.getApiPostCall(ApiContants.getClient, params)
         apiClient.getApiPostCall(ApiContants.getProductCategory, params)
-        apiClient.getApiPostCall(ApiContants.getMEP, params)
 
         //  apiClient.getApiPostCall(ApiContants.getCustomProdCat, params)
         //  apiClient.getApiPostCall(ApiContants.GetDealer, params)
@@ -263,20 +260,10 @@ class HomeFragment : Fragment(), ApiResponseListner {
                     }
 
                     handleRcDashboard(dashboardBean.data)
+                    handleNotificationList(dashboardBean.data.followups)
                 }
 
 
-            }
-
-            if (tag == ApiContants.getSource) {
-                val sourceBean = apiClient.getConvertIntoModel<SourceBean>(
-                    jsonElement.toString(),
-                    SourceBean::class.java
-                )
-                if (sourceBean.error == false) {
-                    SalesApp.sourceList.clear()
-                    SalesApp.sourceList.addAll(sourceBean.data)
-                }
             }
 
             if (tag == ApiContants.getState) {
@@ -287,28 +274,6 @@ class HomeFragment : Fragment(), ApiResponseListner {
                 if (stateBean.error == false) {
                     SalesApp.stateList.clear()
                     SalesApp.stateList.addAll(stateBean.data)
-                }
-            }
-
-            if (tag == ApiContants.getPlumber) {
-                val istallerBean = apiClient.getConvertIntoModel<InstallerBean>(
-                    jsonElement.toString(),
-                    InstallerBean::class.java
-                )
-                if (istallerBean.error == false) {
-                    SalesApp.installerList.clear()
-                    SalesApp.installerList.addAll(istallerBean.data)
-                }
-            }
-
-            if (tag == ApiContants.getArchitect) {
-                val architectBean = apiClient.getConvertIntoModel<ArchitectBean>(
-                    jsonElement.toString(),
-                    ArchitectBean::class.java
-                )
-                if (architectBean.error == false) {
-                    SalesApp.architectList.clear()
-                    SalesApp.architectList.addAll(architectBean.data)
                 }
             }
 
@@ -323,16 +288,6 @@ class HomeFragment : Fragment(), ApiResponseListner {
                 }
             }
 
-            if (tag == ApiContants.getClient) {
-                val clientBean = apiClient.getConvertIntoModel<ClientBean>(
-                    jsonElement.toString(),
-                    ClientBean::class.java
-                )
-                if (clientBean.error == false) {
-                    SalesApp.clientList.clear()
-                    SalesApp.clientList.addAll(clientBean.data)
-                }
-            }
 
             if (tag == ApiContants.getProductCategory) {
                 val productCategoryBean = apiClient.getConvertIntoModel<ProductCategoryBean>(
@@ -343,17 +298,6 @@ class HomeFragment : Fragment(), ApiResponseListner {
                 if (productCategoryBean.error == false) {
                     SalesApp.productCatList.clear()
                     SalesApp.productCatList.addAll(productCategoryBean.data)
-                }
-            }
-            if (tag == ApiContants.getMEP) {
-                val mepBean = apiClient.getConvertIntoModel<MEPBean>(
-                    jsonElement.toString(),
-                    MEPBean::class.java
-                )
-
-                if (mepBean.error == false) {
-                    SalesApp.mepList.clear()
-                    SalesApp.mepList.addAll(mepBean.data)
                 }
             }
 
@@ -601,6 +545,25 @@ class HomeFragment : Fragment(), ApiResponseListner {
         return menuList
     }
 
+
+
+    fun handleNotificationList(data: List<DashboardBean.Data.Followup>) {
+        binding.rcNotification.layoutManager = LinearLayoutManager(requireContext())
+        var mAdapter = NotificationAdapter(requireActivity(), data, object :
+            RvStatusClickListner {
+            override fun clickPos(status: String, pos: Int) {
+              /*  startActivity(
+                    Intent(
+                        context,
+                        AllLeadActivity::class.java
+                    ).putExtra("leadStatus", status)
+                )*/
+            }
+        })
+        binding.rcNotification.adapter = mAdapter
+        // rvMyAcFiled.isNestedScrollingEnabled = false
+
+    }
     fun callPGURL(url: String) {
         Log.d("weburl", url)
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -615,4 +578,8 @@ class HomeFragment : Fragment(), ApiResponseListner {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+    //   apiAllGet()
+    }
 }

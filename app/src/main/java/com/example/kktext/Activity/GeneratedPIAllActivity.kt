@@ -61,7 +61,7 @@ class GeneratedPIAllActivity : AppCompatActivity(), ApiResponseListner,
         SalesApp.isAddAccessToken = true
         apiClient = ApiController(this, this)
         val params = Utility.getParmMap()
-        apiClient.progressView.showLoader()
+    //    apiClient.progressView.showLoader()
         apiClient.getApiPostCall(ApiContants.GetGeneratedPI, params)
     }
 

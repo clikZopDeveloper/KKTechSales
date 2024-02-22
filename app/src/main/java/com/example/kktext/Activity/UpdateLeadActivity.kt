@@ -125,8 +125,7 @@ class UpdateLeadActivity : AppCompatActivity(), ApiResponseListner,
                     this@UpdateLeadActivity,
                     { view, year, monthOfYear, dayOfMonth ->
                         //  dob.setText(dateofnews);
-                        val dateofnews =
-                            "${dayOfMonth.toString() + "/" + (monthOfYear + 1).toString() + "/" + year}"
+                        val dateofnews = "${ year.toString()+ "-"+(monthOfYear + 1).toString()  + "-" + dayOfMonth.toString() }"
 
                         //   val dateofnews = (monthOfYear + 1).toString() + "/" + dayOfMonth + "/" + year
                         editDate.setText(dateofnews)
