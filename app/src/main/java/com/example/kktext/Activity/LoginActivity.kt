@@ -213,6 +213,6 @@ class LoginActivity : AppCompatActivity() , ApiResponseListner {
     override fun onDestroy() {
         super.onDestroy()
         // Start the LocationService when the app is closed
-        startService(Intent(this, LocationService::class.java))
+      //  startService(Intent(this, LocationService::class.java))
     }
 }

@@ -9,9 +9,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,11 +21,13 @@ import com.example.kktext.ApiHelper.ApiResponseListner
 import com.example.kktext.Model.LeadDetailBean
 import com.example.kktext.Model.ProductDeleteBean
 import com.example.kktext.Model.SearchBean
+import com.example.kktext.Model.UpdateLeadBean
 import com.example.kktext.R
 import com.example.kktext.Utills.*
 import com.example.kktext.databinding.ActivitySearchBinding
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.stpl.antimatter.Utils.ApiContants
 
@@ -38,7 +38,9 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
     private lateinit var apiClient: ApiController
     var myReceiver: ConnectivityListener? = null
     var activity: Activity = this
+    var conversionType="Partial"
     var leadID=0
+    private var quoteListID: MutableList<Any?>?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_search)
@@ -76,6 +78,15 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
     override fun success(tag: String?, jsonElement: JsonElement?) {
         try {
             apiClient.progressView.hideLoader()
+
+            if (tag == ApiContants.UpdateLead) {
+                val updateLeadBean = apiClient.getConvertIntoModel<UpdateLeadBean>(
+                    jsonElement.toString(),
+                    UpdateLeadBean::class.java
+                )
+                Toast.makeText(this, updateLeadBean.msg, Toast.LENGTH_SHORT).show()
+
+            }
             if (tag == ApiContants.LeadSearch) {
                 val searchBean = apiClient.getConvertIntoModel<SearchBean>(
                     jsonElement.toString(),
@@ -84,7 +95,6 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
                 if (searchBean.error==false) {
                     handleSearchData(searchBean.data.leads)
                 }
-
             }
             if (tag == ApiContants.LeadDetail) {
                 val leadDeatilBean = apiClient.getConvertIntoModel<LeadDetailBean>(
@@ -95,7 +105,6 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
                 if (leadDeatilBean.error==false) {
                     setLeadDetailDialog(leadDeatilBean.data)
                 }
-
             }
             if (tag == ApiContants.DeleteProductData) {
                 val productDeleteBean = apiClient.getConvertIntoModel<ProductDeleteBean>(jsonElement.toString(),
@@ -114,7 +123,6 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
         Utility.showSnackBar(this, errorMessage)
     }
 
-
     fun handleSearchData(data: List<SearchBean.Data.Lead>) {
         binding.rcSearch.layoutManager = LinearLayoutManager(this)
         var mAdapter = SearchAdapter(this, data,"", object :
@@ -126,8 +134,8 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
         })
         binding.rcSearch.adapter = mAdapter
         // rvMyAcFiled.isNestedScrollingEnabled = false
-
     }
+
     fun apiLeadDetail(leadID: Int) {
         SalesApp.isAddAccessToken = true
         apiClient = ApiController(this, this)
@@ -155,6 +163,7 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
         val tvCity = dialog.findViewById<TextView>(R.id.tvCity)
         val tvGST = dialog.findViewById<TextView>(R.id.tvGST)
         val tvEmail = dialog.findViewById<TextView>(R.id.tvEmail)
+        val tvSubmit = dialog.findViewById<TextView>(R.id.tvSubmit)
         val tvMEP = dialog.findViewById<TextView>(R.id.tvMEP)
         val tvWhatsappNo = dialog.findViewById<TextView>(R.id.tvWhatsappNo)
         val tvAddress = dialog.findViewById<TextView>(R.id.tvAddress)
@@ -166,6 +175,10 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
         val rcLeadProdtList = dialog.findViewById<RecyclerView>(R.id.rcLeadProdtList)
         val rcQuotation = dialog.findViewById<RecyclerView>(R.id.rcQuotation)
         val rcCommentList = dialog.findViewById<RecyclerView>(R.id.rcCommentList)
+        val rbPartial = dialog.findViewById<RadioButton>(R.id.rbPartial)
+        val rbCompleted = dialog.findViewById<RadioButton>(R.id.rbCompleted)
+        val radioGroup = dialog.findViewById<RadioGroup>(R.id.radioGroup)
+        val tvConst = dialog.findViewById<TextView>(R.id.tvConst)
         builder.setView(dialog)
         builder.show()
         ivClose.setOnClickListener {
@@ -198,11 +211,54 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
 
         //   tvAddress.setText(data.address.toString())
         //  tvDealer.setText(data.dealer.toString())
-
+        typeMode(radioGroup)
               //   if (!data.customProduct.isNullOrEmpty())  handleDocumentList(rcDocumentList, data.customProduct)
 
+        if (data.leadData.conversionType.equals("Completed")){
+            radioGroup.visibility=View.GONE
+            tvConst.visibility=View.GONE
+        }else{
+            radioGroup.visibility=View.VISIBLE
+            tvConst.visibility=View.VISIBLE
+        }
+
+        tvSubmit.setOnClickListener {
+            apiUpdateLead()
+        }
     }
 
+    fun apiUpdateLead() {
+        SalesApp.isAddAccessToken = true
+        apiClient = ApiController(activity, this)
+        val params = Utility.getParmMap()
+        params["lead_id"] = leadID.toString()
+        params["status"] = intent.getStringExtra("leadStatus").toString()
+        params["remarks"] = ""
+        params["call_date"] =""
+        params["call_time"] =""
+        params["conversion"] = conversionType
+        params["gst"] = ""
+        params["ids"] = Gson().toJson(quoteListID)
+
+        apiClient.progressView.showLoader()
+        apiClient.getApiPostCall(ApiContants.UpdateLead, params)
+
+    }
+    fun typeMode(radioGroup: RadioGroup) {
+        radioGroup.setOnCheckedChangeListener(object : RadioGroup.OnCheckedChangeListener {
+            override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
+                if (checkedId == R.id.rbPartial) {
+                    conversionType = "Partial"
+                    //    apiCatory(projectType)
+                    Toast.makeText(this@SearchDataActivity,conversionType,Toast.LENGTH_SHORT).show()
+                } else if (checkedId == R.id.rbCompleted) {
+                    conversionType = "Completed"
+                    Toast.makeText(this@SearchDataActivity,conversionType,Toast.LENGTH_SHORT).show()
+                    //   apiCatory(projectType)
+                }
+            }
+        })
+    }
     fun handleLeadProductsList(
         rcLeadProdtList: RecyclerView,
         leadProduct: List<LeadDetailBean.Data.LeadProduct>
@@ -244,6 +300,7 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
         var mAdapter = CustomProdListAdapter(this, leadProduct, object :
             RvListClickListner {
             override fun clickPos(status: MutableList<Any?>?, pos: Int) {
+                quoteListID=status
             }
         })
         rcCustmProdtList.adapter = mAdapter
