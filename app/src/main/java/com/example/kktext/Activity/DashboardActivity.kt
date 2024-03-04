@@ -1,6 +1,9 @@
 package com.example.kktext.Activity
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
@@ -8,6 +11,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.SystemClock
 import android.provider.Settings
 import android.util.Log
 import android.view.Menu
@@ -99,8 +103,6 @@ class DashboardActivity : AppCompatActivity(), ApiResponseListner {
     var isActive = true
     var dayStatus = 5
     private lateinit var mFusedLocationClient: FusedLocationProviderClient
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -191,6 +193,12 @@ class DashboardActivity : AppCompatActivity(), ApiResponseListner {
         }
         Log.d("token>>>>>", PrefManager.getString(ApiContants.AccessToken, ""))
 
+    //    callTwoMintsCode()
+
+        Intent(applicationContext, LocationService::class.java).apply {
+            action = LocationService.ACTION_START
+            startService(this)
+        }
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
 
@@ -369,7 +377,6 @@ class DashboardActivity : AppCompatActivity(), ApiResponseListner {
                 rcReport.setVisibility(View.GONE)
             }
         })
-
     }
 
     fun apiCallDayStatus(dayStatus: String) {
@@ -956,9 +963,14 @@ class DashboardActivity : AppCompatActivity(), ApiResponseListner {
     }
 
     private fun checkPermissions(): Boolean {
-        if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
 
             return true

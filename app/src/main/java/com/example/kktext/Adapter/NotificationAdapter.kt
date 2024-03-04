@@ -34,8 +34,8 @@ class NotificationAdapter(var context: Activity, var list: List<DashboardBean.Da
       //  holder.tvPlumber.text= "Plumber : "+list[position].plumber
         holder.tvNumber.text=list[position].number.toString()
         holder.tvStatus.text= list[position].status.toString()
-        holder.tvRemainedTime.text= list[position].remind_time.toString()
-        holder.tvRemainedDate.text= list[position].remind_date.toString()
+        holder.tvRemainedTime.text= list[position].remindTime.toString()
+        holder.tvRemainedDate.text= list[position].remindDate.toString()
 
 
 

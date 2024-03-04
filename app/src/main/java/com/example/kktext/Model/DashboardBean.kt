@@ -17,13 +17,13 @@ data class DashboardBean(
         @SerializedName("booked")
         val booked: String, // 0
         @SerializedName("call_scheduled")
-        val callScheduled: String, // 0
+        val callScheduled: String, // 56
         @SerializedName("cancelled")
         val cancelled: String, // 0
         @SerializedName("completed")
-        val completed: String, // 4
+        val completed: String, // 2
         @SerializedName("converted_leads")
-        val convertedLeads: String, // 0
+        val convertedLeads: String, // 4
         @SerializedName("executive_count")
         val executiveCount: Int, // 0
         @SerializedName("followups")
@@ -33,39 +33,39 @@ data class DashboardBean(
         @SerializedName("lost_leads")
         val lostLeads: String, // 0
         @SerializedName("monthly_sale")
-        val monthlySale: Int, // 1326725
+        val monthlySale: Double, // 83340.75
         @SerializedName("new_leads")
-        val newLeads: String, // 3
+        val newLeads: String, // 2
         @SerializedName("Partial")
-        val partial: String, // 0
+        val partial: String, // 1
         @SerializedName("pending_leads")
         val pendingLeads: String, // 0
         @SerializedName("processing_leads")
-        val processingLeads: String, // 0
+        val processingLeads: String, // 6
         @SerializedName("sm_newLeads")
         val smNewLeads: String, // 0
         @SerializedName("total_leads")
-        val totalLeads: Int, // 8
+        val totalLeads: Int, // 213
         @SerializedName("visit_done")
-        val visitDone: String, // 1
+        val visitDone: String, // 52
         @SerializedName("visit_scheduled")
-        val visitScheduled: String, // 1
+        val visitScheduled: String, // 83
         @SerializedName("yearly_sale")
-        val yearlySale: Int // 0
+        val yearlySale: Int // 83341
     ) {
         data class Followup(
             @SerializedName("id")
-            val id: Int, // 2595
+            val id: Int, // 2764
             @SerializedName("name")
-            val name: String, // adeshManocha clikzop
+            val name: String, // MR. Rommy Bansal Advocate
             @SerializedName("number")
-            val number: String, // 8145581455
+            val number: String, // 8896510001
+            @SerializedName("remind_date")
+            val remindDate: String, // 2024-2-29
+            @SerializedName("remind_time")
+            val remindTime: String,
             @SerializedName("status")
-            val status: String ,// VISIT SCHEDULED
-             @SerializedName("remind_date")
-            val remind_date: String ,// VISIT SCHEDULED
-             @SerializedName("remind_time")
-            val remind_time: String ,// VISIT SCHEDULED
+            val status: String // VISIT SCHEDULED
         )
     }
 }

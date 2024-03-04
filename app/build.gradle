@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId = "com.example.kktext"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 32
         versionCode = 1
         versionName = "1.0"
         archivesBaseName = "kktext" + versionCode
@@ -27,6 +27,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -64,7 +65,7 @@ dependencies {
     implementation ("com.google.android.libraries.places:places:1.1.0")
     implementation ("com.google.android.gms:play-services-maps:17.0.0")
     implementation ("com.google.android.gms:play-services-places:17.0.0")
-    implementation ("com.google.android.gms:play-services-location:20.0.0")
+    implementation ("com.google.android.gms:play-services-location:17.0.0")
     implementation ("com.google.android.gms:play-services-base:17.1.0")
     implementation ("com.google.android.gms:play-services-identity:17.0.0")
     implementation ("com.google.android.gms:play-services-auth:17.0.0")
@@ -98,7 +99,5 @@ dependencies {
     /////////////////Chunker///////////////////////
     debugImplementation "com.github.chuckerteam.chucker:library:4.0.0"
     releaseImplementation "com.github.chuckerteam.chucker:library-no-op:4.0.0"
-
-
 
 }

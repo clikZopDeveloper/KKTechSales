@@ -262,10 +262,7 @@ class HomeFragment : Fragment(), ApiResponseListner {
                     handleRcDashboard(dashboardBean.data)
                     handleNotificationList(dashboardBean.data.followups)
                 }
-
-
             }
-
             if (tag == ApiContants.getState) {
                 val stateBean = apiClient.getConvertIntoModel<StateBean>(
                     jsonElement.toString(),

@@ -2,6 +2,8 @@ package com.example.kktext.Utills;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -9,20 +11,22 @@ import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
-
-
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 
 
+import com.example.kktext.LocationClient;
 import com.example.kktext.Model.ArchitectBean;
 import com.example.kktext.Model.ClientBean;
 import com.example.kktext.Model.CustProdCatBean;
@@ -64,15 +68,51 @@ public class SalesApp extends Application implements Application.ActivityLifecyc
     public void onCreate() {
         super.onCreate();
         appContext = this;
-        deviceId = Settings.Secure.getString(getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-        Locale locale = new Locale("en", "US");
-        setLocale(locale);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            NotificationChannel channel =new  NotificationChannel(
+                    "location",
+                    "Location",
+                    NotificationManager.IMPORTANCE_LOW
+            );
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(channel);
+
+
+        }
+     //   deviceId = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
+       // Locale locale = new Locale("en", "US");
+       // setLocale(locale);
         registerActivityLifecycleCallbacks(this);
-        HashKeyGenerator();
+      //  HashKeyGenerator();
+
+
     }
     public static void setConnectivityListener(ConnectivityListener.ConnectivityReceiverListener listener) {
         ConnectivityListener.connectivityReceiverListener = listener;
+    }
+    private  boolean checkPermissions() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(
+                        this,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+        ) {
+
+            return true;
+        }
+        return false;
+    }
+    private boolean isLocationEnabled() {
+        LocationManager locationManager =
+                (LocationManager) getSystemService(LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+                LocationManager.NETWORK_PROVIDER
+        );
     }
     @SuppressWarnings("deprecation")
     private void setLocale(Locale locale) {

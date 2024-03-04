@@ -4,7 +4,7 @@ public class ApiContants {
     companion object {
         var isconnectedtonetwork = false
 
-        const val EmailAddress = "hello@*******.com"
+        const val EmailAddress = "hello@antimatterfit.com"
         const val REQ_CODE_VERSION_UPDATE = 530
         const val PlaceLocation = "location"
         const val mobileNumber = "mobileNumber"
@@ -13,7 +13,7 @@ public class ApiContants {
         const val PlaceLatLang = "locLatLang"
         const val PlaceLat = "locLat"
         const val PlaceLang = "PlaceLang"
-        val WhatsAppNumber = "+91*********"
+        val WhatsAppNumber = "+918448440923"
         const val PREF_IS_METRIC = "unit"
         const val UserDetails = "userDetails"
         const val UserAvailableAmt = "useravailablebal"
@@ -25,11 +25,22 @@ public class ApiContants {
 
 ///////////////////Testing URL////////////////////////////////////////
            const val BaseUrl="https://sales.kktechecoproducts.online/sale-manager-api/"//Testing URL
+           const val ImageBaseUrl = "https://www.art.antimatterfit.com/"//Testing URL
+           const val ImageBaseUrlWhyChoose = "https://www.art.antimatterfit.com/public/images/"//Testing URL
+           const val VideoBaseUrl = "https://www.art.antimatterfit.com/"//Testing URL
+
+/////////////////////////////////////Live URL////////////////////////
+   //     const val BaseUrl = "http://admin.antimatterfit.com/api/"//Live Url
+  //      const val ImageBaseUrl = "http://admin.antimatterfit.com/"//Live Url
+   //     const val ImageBaseUrlWhyChoose = "http://admin.antimatterfit.com/public/images/"
+   //     const val VideoBaseUrl = "http://admin.antimatterfit.com/"
 
         const val success = "success"
         const val failure = "failure"
         const val NoInternetConnection = "Please check your internet connection"
-
+        const val privacyUrl = "http://antimatterfit.com/privacy-policy"
+        const val returnPolicyUrl = "http://antimatterfit.com/return-policy/"
+        const val termsUrl = "http://antimatterfit.com/terms-condition"
         const val downloadUrl = "https://atulautomotive.online/"
         //        api Tags
         const val login = "login"

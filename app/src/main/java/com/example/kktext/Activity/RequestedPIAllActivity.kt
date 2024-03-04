@@ -193,7 +193,7 @@ class RequestedPIAllActivity : AppCompatActivity(), ApiResponseListner,
         }
 
         tvRequestQuote.setOnClickListener {
-            apiRequestQuote(leadID)
+            apiRequestQuote(leadID);
         }
 
         if (!data.leadProducts.isNullOrEmpty()) handleLeadProductsList(rcLeadProdtList, data.leadProducts)
@@ -225,8 +225,8 @@ class RequestedPIAllActivity : AppCompatActivity(), ApiResponseListner,
         //   tvAddress.setText(data.address.toString())
         //  tvDealer.setText(data.dealer.toString())
 
-     //   if (!data.customProduct.isNullOrEmpty())
-    //   handleDocumentList(rcDocumentList, data.customProduct)
+
+     //   if (!data.customProduct.isNullOrEmpty())  handleDocumentList(rcDocumentList, data.customProduct)
 
     }
 

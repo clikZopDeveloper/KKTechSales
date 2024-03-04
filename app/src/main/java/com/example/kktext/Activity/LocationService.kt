@@ -1,125 +1,103 @@
 package com.example.kktext.Activity
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Notification
+import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Location
-import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import com.example.kktext.ApiHelper.ApiController
 import com.example.kktext.ApiHelper.ApiResponseListner
+import com.example.kktext.DefaultLocationClient
+import com.example.kktext.LocationClient
 import com.example.kktext.Model.ProductDeleteBean
+import com.example.kktext.R
 import com.example.kktext.Utills.SalesApp
 import com.example.kktext.Utills.Utility
-import com.google.android.gms.location.*
+import com.google.android.gms.location.LocationServices
 import com.google.gson.JsonElement
 import com.stpl.antimatter.Utils.ApiContants
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
-class LocationService : Service() , ApiResponseListner{
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var apiClient: ApiController
-    var location: Location?=null
-    override fun onCreate() {
-        super.onCreate()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+class LocationService: Service(){
+    private var lat: String?=null
+    private var long: String?=null
 
-    }
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private lateinit var locationClient: LocationClient
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // startForeground(1, createNotification())
-
-        requestLocationUpdates()
-
-        return START_STICKY
-    }
-    fun apiUpdateLoction() {
-        SalesApp.isAddAccessToken = true
-        apiClient = ApiController(this, this)
-        val params = Utility.getParmMap()
-        params["last_location"] = "${location?.latitude},${location?.longitude}"
-        //    apiClient.progressView.showLoader()
-        apiClient.getApiPostCall(ApiContants.getLocationUpdate, params)
-    }
-
-    private fun requestLocationUpdates() {
-        val locationRequest = LocationRequest.create().apply {
-            interval = 3 * 60 * 1000 // 15 minutes
-            //  interval = 1 * 60 * 1000 // 2 minutes
-
-            fastestInterval = 3 * 60 * 1000 // 5 minutes
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-
-        }
-
-        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
-        }
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult) {
-                    super.onLocationResult(locationResult)
-                    location = locationResult.lastLocation
-                    Log.d("LocationService", "Latitude: ${location?.latitude}, Longitude: ${location?.longitude}")
-                        apiUpdateLoction()
-                }
-            },
-            null
-        )
-    }
-
-    @SuppressLint("SuspiciousIndentation")
-    override fun success(tag: String?, jsonElement: JsonElement?) {
-        try {
-            //    apiClient.progressView.hideLoader()
-            if (tag == ApiContants.getLocationUpdate) {
-                val requestQuoteBean = apiClient.getConvertIntoModel<ProductDeleteBean>(
-                    jsonElement.toString(),
-                    ProductDeleteBean::class.java
-                )
-
-                //       Toast.makeText(this, requestQuoteBean.msg, Toast.LENGTH_SHORT).show()
-            }
-
-        }catch (e:Exception){
-            Log.d("error>>",e.localizedMessage)
-        }
-    }
-
-    override fun failure(tag: String?, errorMessage: String) {
-        apiClient.progressView.hideLoader()
-        Utility.showSnackBar(context = Activity(), errorMessage)
-    }
-
-    private fun createNotification(): Notification {
-        // Create a notification for the foreground service
-        return NotificationCompat.Builder(this, "channelId")
-            .setContentTitle("Location Service")
-            .setContentText("Updating location in the background")
-            .setSmallIcon(com.example.kktext.R.drawable.install_icon)
-            .build()
-    }
-
-    override fun onBind(intent: Intent?): IBinder? {
+    override fun onBind(p0: Intent?): IBinder? {
         return null
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        locationClient = DefaultLocationClient(
+            applicationContext,
+            LocationServices.getFusedLocationProviderClient(applicationContext)
+        )
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when(intent?.action) {
+            ACTION_START -> start()
+            ACTION_STOP -> stop()
+        }
+        return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun start() {
+        val notification = NotificationCompat.Builder(this, "location")
+            .setContentTitle("Tracking location...")
+            .setContentText("Location: ")
+            .setSmallIcon(R.drawable.app_logo)
+            .setOngoing(true)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+       // val interval = 100 * 1000 // 10 seconds in milliseconds
+        val interval = 3 * 60 * 1000 // 3 minutes
+        locationClient
+            .getLocationUpdates(interval.toLong())
+            .catch { e -> e.printStackTrace() }
+            .onEach { location ->
+                 lat = location.latitude.toString().takeLast(3)
+                 long = location.longitude.toString().takeLast(3)
+                val updatedNotification = notification.setContentText(
+                    "Location: ($lat, $long)"
+                )
+
+                notificationManager.notify(1, updatedNotification.build())
+
+
+
+              //  mDoThisJob()
+            }
+            .launchIn(serviceScope)
+
+        startForeground(1, notification.build())
+    }
+
+    private fun stop() {
+        stopForeground(true)
+        stopSelf()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceScope.cancel()
+    }
+
+    companion object {
+        const val ACTION_START = "ACTION_START"
+        const val ACTION_STOP = "ACTION_STOP"
+    }
 }

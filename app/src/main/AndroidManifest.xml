@@ -15,7 +15,6 @@
     <uses-permission android:name="android.permission.ACCESS_GPS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
         android:name=".Utills.SalesApp"
@@ -141,12 +140,12 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
-      <!--  <service
-            android:name=".Activity.LocationService"
-            android:exported="false" />-->
         <service
             android:name=".Activity.LocationService"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="location"/>
+
+
         <activity
             android:name=".Activity.DashboardActivity"
             android:exported="true"

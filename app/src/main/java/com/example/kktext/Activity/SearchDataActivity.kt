@@ -57,6 +57,7 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
         intent.getStringExtra("searchKey")?.let { apiCallSearch(it) }
     }
 
+
     fun apiCallSearch(searchData:String) {
         SalesApp.isAddAccessToken = true
         apiClient = ApiController(activity, this)
@@ -66,6 +67,7 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
         apiClient.getApiPostCall(ApiContants.LeadSearch, params)
 
     }
+
     fun apiProductDelete(leadID: Int) {
         SalesApp.isAddAccessToken = true
         apiClient = ApiController(this, this)
@@ -78,15 +80,6 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
     override fun success(tag: String?, jsonElement: JsonElement?) {
         try {
             apiClient.progressView.hideLoader()
-
-            if (tag == ApiContants.UpdateLead) {
-                val updateLeadBean = apiClient.getConvertIntoModel<UpdateLeadBean>(
-                    jsonElement.toString(),
-                    UpdateLeadBean::class.java
-                )
-                Toast.makeText(this, updateLeadBean.msg, Toast.LENGTH_SHORT).show()
-
-            }
             if (tag == ApiContants.LeadSearch) {
                 val searchBean = apiClient.getConvertIntoModel<SearchBean>(
                     jsonElement.toString(),
@@ -95,6 +88,7 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
                 if (searchBean.error==false) {
                     handleSearchData(searchBean.data.leads)
                 }
+
             }
             if (tag == ApiContants.LeadDetail) {
                 val leadDeatilBean = apiClient.getConvertIntoModel<LeadDetailBean>(
@@ -105,6 +99,14 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
                 if (leadDeatilBean.error==false) {
                     setLeadDetailDialog(leadDeatilBean.data)
                 }
+            }
+            if (tag == ApiContants.UpdateLead) {
+                val updateLeadBean = apiClient.getConvertIntoModel<UpdateLeadBean>(
+                    jsonElement.toString(),
+                    UpdateLeadBean::class.java
+                )
+                Toast.makeText(this, updateLeadBean.msg, Toast.LENGTH_SHORT).show()
+
             }
             if (tag == ApiContants.DeleteProductData) {
                 val productDeleteBean = apiClient.getConvertIntoModel<ProductDeleteBean>(jsonElement.toString(),
@@ -123,6 +125,7 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
         Utility.showSnackBar(this, errorMessage)
     }
 
+
     fun handleSearchData(data: List<SearchBean.Data.Lead>) {
         binding.rcSearch.layoutManager = LinearLayoutManager(this)
         var mAdapter = SearchAdapter(this, data,"", object :
@@ -134,8 +137,8 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
         })
         binding.rcSearch.adapter = mAdapter
         // rvMyAcFiled.isNestedScrollingEnabled = false
-    }
 
+    }
     fun apiLeadDetail(leadID: Int) {
         SalesApp.isAddAccessToken = true
         apiClient = ApiController(this, this)
@@ -184,6 +187,7 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
         ivClose.setOnClickListener {
             builder.dismiss()
         }
+
         if (!data.leadProducts.isNullOrEmpty()) handleLeadProductsList(rcLeadProdtList, data.leadProducts)
         if (!data.leadComments.isNullOrEmpty()) handleLeadCommentList(rcCommentList, data.leadComments)
         if (!data.quoteProduct.isNullOrEmpty())  handlercQuotationProdList(rcQuotation, data.quoteProduct)
@@ -212,7 +216,7 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
         //   tvAddress.setText(data.address.toString())
         //  tvDealer.setText(data.dealer.toString())
         typeMode(radioGroup)
-              //   if (!data.customProduct.isNullOrEmpty())  handleDocumentList(rcDocumentList, data.customProduct)
+        //   if (!data.customProduct.isNullOrEmpty())  handleDocumentList(rcDocumentList, data.customProduct)
 
         if (data.leadData.conversionType.equals("Completed")){
             radioGroup.visibility=View.GONE
@@ -223,27 +227,10 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
         }
 
         tvSubmit.setOnClickListener {
-            apiUpdateLead()
+            apiUpdateLead(data.leadData.status)
         }
     }
 
-    fun apiUpdateLead() {
-        SalesApp.isAddAccessToken = true
-        apiClient = ApiController(activity, this)
-        val params = Utility.getParmMap()
-        params["lead_id"] = leadID.toString()
-        params["status"] = intent.getStringExtra("leadStatus").toString()
-        params["remarks"] = ""
-        params["call_date"] =""
-        params["call_time"] =""
-        params["conversion"] = conversionType
-        params["gst"] = ""
-        params["ids"] = Gson().toJson(quoteListID)
-
-        apiClient.progressView.showLoader()
-        apiClient.getApiPostCall(ApiContants.UpdateLead, params)
-
-    }
     fun typeMode(radioGroup: RadioGroup) {
         radioGroup.setOnCheckedChangeListener(object : RadioGroup.OnCheckedChangeListener {
             override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
@@ -307,7 +294,23 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
         // rvMyAcFiled.isNestedScrollingEnabled = false
 
     }
+    fun apiUpdateLead(status: String) {
+        SalesApp.isAddAccessToken = true
+        apiClient = ApiController(activity, this)
+        val params = Utility.getParmMap()
+        params["lead_id"] = leadID.toString()
+        params["status"] = status
+        params["remarks"] = ""
+        params["call_date"] =""
+        params["call_time"] =""
+        params["conversion"] = conversionType
+        params["gst"] = ""
+        params["ids"] = Gson().toJson(quoteListID)
 
+        apiClient.progressView.showLoader()
+        apiClient.getApiPostCall(ApiContants.UpdateLead, params)
+
+    }
     private fun openFullScreenDialog(imgUrl: String) {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.fullscreen_dailog)
@@ -366,7 +369,7 @@ class SearchDataActivity : AppCompatActivity(), ApiResponseListner,
     override fun onDestroy() {
         super.onDestroy()
         // Start the LocationService when the app is closed
-        startService(Intent(this, LocationService::class.java))
+    //    startService(Intent(this, LocationService::class.java))
     }
     override fun onNetworkConnectionChange(isconnected: Boolean) {
         ApiContants.isconnectedtonetwork = isconnected
